@@ -1,6 +1,6 @@
 # flutterapptest
 
-플러터 
+플러터 연습용
 
 ## Getting Started
 
