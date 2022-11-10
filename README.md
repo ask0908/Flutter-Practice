@@ -1,6 +1,6 @@
 # flutterapptest
 
-A new Flutter project.
+플러터 연습용
 
 ## Getting Started
 
