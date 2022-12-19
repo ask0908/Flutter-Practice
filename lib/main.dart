@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapptest/screen/home_screen.dart';
+import 'package:flutterapptest/screen/more_screen.dart';
 import 'package:flutterapptest/widget/bottom_bar.dart';
 
 /*
@@ -30,12 +31,13 @@ class MyAppState extends State<MyApp> {
         length: 4, // 밑에 몇 개의 탭을 만들 것인가?
         child: Scaffold(
           body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(), // 사용자가 스와이프로 탭 스크롤하는 걸 막음
+            physics:
+                const NeverScrollableScrollPhysics(), // 사용자가 스와이프로 탭 스크롤하는 걸 막음
             children: [
               HomeScreen(),
               Container(child: Center(child: Text('search'))),
               Container(child: Center(child: Text('save'))),
-              Container(child: Center(child: Text('more')))
+              MoreScreen(),
             ],
           ),
           bottomNavigationBar: Bottom(),
