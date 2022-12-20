@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapptest/widget/box_slider.dart';
 import 'package:flutterapptest/widget/carousel_slider.dart';
@@ -11,40 +12,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  List<Movie> movies = [
-    Movie.fromMap({
-      'title': '사랑의 불시착',
-      'keyword': '사랑/로맨스/판타지',
-      'poster': 'test_movie_1.png',
-      'like': false
-    }),
-    Movie.fromMap({
-      'title': '사랑의 불시착',
-      'keyword': '사랑/로맨스/판타지',
-      'poster': 'test_movie_1.png',
-      'like': false
-    }),
-    Movie.fromMap({
-      'title': '사랑의 불시착',
-      'keyword': '사랑/로맨스/판타지',
-      'poster': 'test_movie_1.png',
-      'like': false
-    }),
-    Movie.fromMap({
-      'title': '사랑의 불시착',
-      'keyword': '사랑/로맨스/판타지',
-      'poster': 'test_movie_1.png',
-      'like': false
-    }),
-  ];
+  FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  late Stream streamData;
 
-  @override
-  void initState() {
-    super.initState();
+  Widget _fetchData(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection("movie").snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return LinearProgressIndicator();
+        return _buildBody(context, snapshot.data!.docs);
+      },
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildBody(BuildContext context, List<QueryDocumentSnapshot> snapShot) {
+    List<Movie> movies = snapShot.map((d) => Movie.fromSnapshot(d)).toList();
     return ListView(
       children: <Widget>[
         Stack(
@@ -57,6 +39,17 @@ class HomeScreenState extends State<HomeScreen> {
         BoxSlider(movies: movies),
       ],
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    streamData = fireStore.collection("movie").snapshots();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _fetchData(context);
   }
 }
 

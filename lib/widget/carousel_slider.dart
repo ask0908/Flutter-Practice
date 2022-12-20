@@ -23,7 +23,7 @@ class _CarouselImageState extends State<CarouselImage> {
   void initState() {
     super.initState();
     movies = widget.movies;
-    images = movies.map((m) => Image.asset('./images/' + m.poster)).toList();
+    images = movies.map((m) => Image.network(m.poster)).toList();
     keywords = movies.map((m) => m.keyword).toList();
     likes = movies.map((m) => m.like).toList();
     _currentKeyword = keywords[0];
@@ -56,14 +56,33 @@ class _CarouselImageState extends State<CarouselImage> {
           ),
           Container(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 가운데에 뷰들을 같은 간격으로 배치시킴
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // 가운데에 뷰들을 같은 간격으로 배치시킴
               children: <Widget>[
                 Container(
                   child: Column(
                     children: <Widget>[
                       likes[_currentPage]
-                          ? IconButton(onPressed: () {}, icon: Icon(Icons.check))
-                          : IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                          ? IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  likes[_currentPage] = !likes[_currentPage];
+                                  movies[_currentPage]
+                                      .reference
+                                      .update({"like": likes[_currentPage]});
+                                });
+                              },
+                              icon: Icon(Icons.check))
+                          : IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  likes[_currentPage] = !likes[_currentPage];
+                                  movies[_currentPage]
+                                      .reference
+                                      .update({"like": likes[_currentPage]});
+                                });
+                              },
+                              icon: Icon(Icons.add)),
                       Text(
                         "내가 찜한 컨텐츠",
                         style: TextStyle(fontSize: 11),
@@ -75,12 +94,25 @@ class _CarouselImageState extends State<CarouselImage> {
                   padding: EdgeInsets.only(right: 10),
                   child: FlatButton(
                     color: Colors.white,
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        likes[_currentPage] = !likes[_currentPage];
+                        movies[_currentPage]
+                            .reference
+                            .update({"like": likes[_currentPage]});
+                      });
+                    },
                     child: Row(
                       children: <Widget>[
-                        Icon(Icons.play_arrow, color: Colors.black,),
+                        Icon(
+                          Icons.play_arrow,
+                          color: Colors.black,
+                        ),
                         Padding(padding: EdgeInsets.all(3)),
-                        Text("재생", style: TextStyle(color: Colors.black),)
+                        Text(
+                          "재생",
+                          style: TextStyle(color: Colors.black),
+                        )
                       ],
                     ),
                   ),
@@ -89,15 +121,20 @@ class _CarouselImageState extends State<CarouselImage> {
                   padding: EdgeInsets.only(right: 10),
                   child: Column(
                     children: <Widget>[
-                      IconButton(onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute<Null>(
-                          fullscreenDialog: true,
-                          builder: (BuildContext context) {
-                            return DetailScreen(movie: movies[_currentPage]);
-                          }
-                        ));
-                      }, icon: Icon(Icons.info)),
-                      Text("정보", style: TextStyle(fontSize: 11),)
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute<Null>(
+                                fullscreenDialog: true,
+                                builder: (BuildContext context) {
+                                  return DetailScreen(
+                                      movie: movies[_currentPage]);
+                                }));
+                          },
+                          icon: Icon(Icons.info)),
+                      Text(
+                        "정보",
+                        style: TextStyle(fontSize: 11),
+                      )
                     ],
                   ),
                 )
@@ -123,8 +160,11 @@ List<Widget> makeIndicator(List list, int _currentPage) {
       width: 8,
       height: 8,
       margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-      decoration: BoxDecoration(shape: BoxShape.circle,
-      color: _currentPage == i ? Color.fromRGBO(255, 255, 255, 0.9) : Color.fromRGBO(255, 255, 255, 0.4)),
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: _currentPage == i
+              ? Color.fromRGBO(255, 255, 255, 0.9)
+              : Color.fromRGBO(255, 255, 255, 0.4)),
     ));
   }
 

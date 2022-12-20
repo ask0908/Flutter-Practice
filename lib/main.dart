@@ -1,14 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapptest/screen/home_screen.dart';
 import 'package:flutterapptest/screen/more_screen.dart';
 import 'package:flutterapptest/widget/bottom_bar.dart';
+
+import 'firebase_options.dart';
 
 /*
  * model : DB 모델 관련 파일들이 들어 있는 패키지
  * screen : 각 화면별 파일들을 모은 패키지
  * widget : 여러 번 반복되거나 자주 쓰이는 widget들을 모은 패키지
  */
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
